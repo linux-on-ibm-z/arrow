@@ -20,6 +20,7 @@ import (
 	"encoding/binary"
 	"reflect"
 	"unsafe"
+	"runtime"
 
 	"github.com/apache/arrow/go/arrow/decimal128"
 )
@@ -39,8 +40,13 @@ func (decimal128Traits) BytesRequired(n int) int { return Decimal128SizeBytes * 
 
 // PutValue
 func (decimal128Traits) PutValue(b []byte, v decimal128.Num) {
-	binary.LittleEndian.PutUint64(b[:8], uint64(v.LowBits()))
-	binary.LittleEndian.PutUint64(b[8:], uint64(v.HighBits()))
+	if runtime.GOARCH == "s390x" {
+		binary.BigEndian.PutUint64(b[:8], uint64(v.LowBits()))
+		binary.BigEndian.PutUint64(b[8:], uint64(v.HighBits()))
+	} else {
+		binary.LittleEndian.PutUint64(b[:8], uint64(v.LowBits()))
+		binary.LittleEndian.PutUint64(b[8:], uint64(v.HighBits()))
+	}
 }
 
 // CastFromBytes reinterprets the slice b to a slice of type uint16.

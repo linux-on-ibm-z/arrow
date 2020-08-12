@@ -22,6 +22,7 @@ import (
 	"encoding/binary"
 	"math"
 	"reflect"
+	"runtime"
 	"unsafe"
 )
 
@@ -58,7 +59,11 @@ func (int64Traits) BytesRequired(n int) int { return Int64SizeBytes * n }
 
 // PutValue
 func (int64Traits) PutValue(b []byte, v int64) {
-	binary.LittleEndian.PutUint64(b, uint64(v))
+	if runtime.GOARCH == "s390x" {
+		binary.BigEndian.PutUint64(b, uint64(v))
+	} else {
+		binary.LittleEndian.PutUint64(b, uint64(v))
+	}
 }
 
 // CastFromBytes reinterprets the slice b to a slice of type int64.
@@ -106,7 +111,11 @@ func (uint64Traits) BytesRequired(n int) int { return Uint64SizeBytes * n }
 
 // PutValue
 func (uint64Traits) PutValue(b []byte, v uint64) {
-	binary.LittleEndian.PutUint64(b, uint64(v))
+	if runtime.GOARCH == "s390x" {
+		binary.BigEndian.PutUint64(b, uint64(v))
+	} else {
+		binary.LittleEndian.PutUint64(b, uint64(v))
+	}
 }
 
 // CastFromBytes reinterprets the slice b to a slice of type uint64.
@@ -154,7 +163,11 @@ func (float64Traits) BytesRequired(n int) int { return Float64SizeBytes * n }
 
 // PutValue
 func (float64Traits) PutValue(b []byte, v float64) {
-	binary.LittleEndian.PutUint64(b, math.Float64bits(v))
+	if runtime.GOARCH == "s390x" {
+		binary.BigEndian.PutUint64(b, math.Float64bits(v))
+	} else {
+		binary.LittleEndian.PutUint64(b, math.Float64bits(v))
+	}
 }
 
 // CastFromBytes reinterprets the slice b to a slice of type float64.
@@ -202,7 +215,11 @@ func (int32Traits) BytesRequired(n int) int { return Int32SizeBytes * n }
 
 // PutValue
 func (int32Traits) PutValue(b []byte, v int32) {
-	binary.LittleEndian.PutUint32(b, uint32(v))
+	if runtime.GOARCH == "s390x" {
+		binary.BigEndian.PutUint32(b, uint32(v))
+	} else {
+		binary.LittleEndian.PutUint32(b, uint32(v))
+	}
 }
 
 // CastFromBytes reinterprets the slice b to a slice of type int32.
@@ -250,7 +267,11 @@ func (uint32Traits) BytesRequired(n int) int { return Uint32SizeBytes * n }
 
 // PutValue
 func (uint32Traits) PutValue(b []byte, v uint32) {
-	binary.LittleEndian.PutUint32(b, uint32(v))
+	if runtime.GOARCH == "s390x" {
+		binary.BigEndian.PutUint32(b, uint32(v))
+	} else {
+		binary.LittleEndian.PutUint32(b, uint32(v))
+	}
 }
 
 // CastFromBytes reinterprets the slice b to a slice of type uint32.
@@ -298,7 +319,11 @@ func (float32Traits) BytesRequired(n int) int { return Float32SizeBytes * n }
 
 // PutValue
 func (float32Traits) PutValue(b []byte, v float32) {
-	binary.LittleEndian.PutUint32(b, math.Float32bits(v))
+	if runtime.GOARCH == "s390x" {
+		binary.BigEndian.PutUint32(b, math.Float32bits(v))
+	} else {
+		binary.LittleEndian.PutUint32(b, math.Float32bits(v))
+	}
 }
 
 // CastFromBytes reinterprets the slice b to a slice of type float32.
@@ -346,7 +371,11 @@ func (int16Traits) BytesRequired(n int) int { return Int16SizeBytes * n }
 
 // PutValue
 func (int16Traits) PutValue(b []byte, v int16) {
-	binary.LittleEndian.PutUint16(b, uint16(v))
+	if runtime.GOARCH == "s390x" {
+		binary.BigEndian.PutUint16(b, uint16(v))
+	} else {
+		binary.LittleEndian.PutUint16(b, uint16(v))
+	}
 }
 
 // CastFromBytes reinterprets the slice b to a slice of type int16.
@@ -394,7 +423,11 @@ func (uint16Traits) BytesRequired(n int) int { return Uint16SizeBytes * n }
 
 // PutValue
 func (uint16Traits) PutValue(b []byte, v uint16) {
-	binary.LittleEndian.PutUint16(b, uint16(v))
+	if runtime.GOARCH == "s390x" {
+		binary.BigEndian.PutUint16(b, uint16(v))
+	} else {
+		binary.LittleEndian.PutUint16(b, uint16(v))
+	}
 }
 
 // CastFromBytes reinterprets the slice b to a slice of type uint16.
@@ -538,7 +571,11 @@ func (timestampTraits) BytesRequired(n int) int { return TimestampSizeBytes * n 
 
 // PutValue
 func (timestampTraits) PutValue(b []byte, v Timestamp) {
-	binary.LittleEndian.PutUint64(b, uint64(v))
+	if runtime.GOARCH == "s390x" {
+		binary.BigEndian.PutUint64(b, uint64(v))
+	} else {
+		binary.LittleEndian.PutUint64(b, uint64(v))
+	}
 }
 
 // CastFromBytes reinterprets the slice b to a slice of type Timestamp.
@@ -586,7 +623,11 @@ func (time32Traits) BytesRequired(n int) int { return Time32SizeBytes * n }
 
 // PutValue
 func (time32Traits) PutValue(b []byte, v Time32) {
-	binary.LittleEndian.PutUint32(b, uint32(v))
+	if runtime.GOARCH == "s390x" {
+		binary.BigEndian.PutUint32(b, uint32(v))
+	} else {
+		binary.LittleEndian.PutUint32(b, uint32(v))
+	}
 }
 
 // CastFromBytes reinterprets the slice b to a slice of type Time32.
@@ -634,7 +675,11 @@ func (time64Traits) BytesRequired(n int) int { return Time64SizeBytes * n }
 
 // PutValue
 func (time64Traits) PutValue(b []byte, v Time64) {
-	binary.LittleEndian.PutUint64(b, uint64(v))
+	if runtime.GOARCH == "s390x" {
+		binary.BigEndian.PutUint64(b, uint64(v))
+	} else {
+		binary.LittleEndian.PutUint64(b, uint64(v))
+	}
 }
 
 // CastFromBytes reinterprets the slice b to a slice of type Time64.
@@ -682,7 +727,11 @@ func (date32Traits) BytesRequired(n int) int { return Date32SizeBytes * n }
 
 // PutValue
 func (date32Traits) PutValue(b []byte, v Date32) {
-	binary.LittleEndian.PutUint32(b, uint32(v))
+	if runtime.GOARCH == "s390x" {
+		binary.BigEndian.PutUint32(b, uint32(v))
+	} else {
+		binary.LittleEndian.PutUint32(b, uint32(v))
+	}
 }
 
 // CastFromBytes reinterprets the slice b to a slice of type Date32.
@@ -730,7 +779,11 @@ func (date64Traits) BytesRequired(n int) int { return Date64SizeBytes * n }
 
 // PutValue
 func (date64Traits) PutValue(b []byte, v Date64) {
-	binary.LittleEndian.PutUint64(b, uint64(v))
+	if runtime.GOARCH == "s390x" {
+		binary.BigEndian.PutUint64(b, uint64(v))
+	} else {
+		binary.LittleEndian.PutUint64(b, uint64(v))
+	}
 }
 
 // CastFromBytes reinterprets the slice b to a slice of type Date64.
@@ -778,7 +831,11 @@ func (durationTraits) BytesRequired(n int) int { return DurationSizeBytes * n }
 
 // PutValue
 func (durationTraits) PutValue(b []byte, v Duration) {
-	binary.LittleEndian.PutUint64(b, uint64(v))
+	if runtime.GOARCH == "s390x" {
+		binary.BigEndian.PutUint64(b, uint64(v))
+	} else {
+		binary.LittleEndian.PutUint64(b, uint64(v))
+	}
 }
 
 // CastFromBytes reinterprets the slice b to a slice of type Duration.

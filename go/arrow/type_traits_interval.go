@@ -20,6 +20,7 @@ import (
 	"encoding/binary"
 	"reflect"
 	"unsafe"
+	"runtime"
 )
 
 var (
@@ -41,7 +42,12 @@ func (monthTraits) BytesRequired(n int) int { return MonthIntervalSizeBytes * n 
 
 // PutValue
 func (monthTraits) PutValue(b []byte, v MonthInterval) {
-	binary.LittleEndian.PutUint32(b, uint32(v))
+	if runtime.GOARCH == "s390x" {
+		binary.BigEndian.PutUint32(b, uint32(v))
+	} else {
+		binary.LittleEndian.PutUint32(b, uint32(v))
+
+	}
 }
 
 // CastFromBytes reinterprets the slice b to a slice of type MonthInterval.
@@ -89,9 +95,15 @@ func (daytimeTraits) BytesRequired(n int) int { return DayTimeIntervalSizeBytes 
 
 // PutValue
 func (daytimeTraits) PutValue(b []byte, v DayTimeInterval) {
-	binary.LittleEndian.PutUint32(b[0:4], uint32(v.Days))
-	binary.LittleEndian.PutUint32(b[4:8], uint32(v.Milliseconds))
+	if runtime.GOARCH == "s390x" {
+		binary.BigEndian.PutUint32(b[0:4], uint32(v.Days))
+		binary.BigEndian.PutUint32(b[4:8], uint32(v.Milliseconds))
+	} else {
+		binary.LittleEndian.PutUint32(b[0:4], uint32(v.Days))
+		binary.LittleEndian.PutUint32(b[4:8], uint32(v.Milliseconds))
+	}
 }
+
 
 // CastFromBytes reinterprets the slice b to a slice of type DayTimeInterval.
 //
